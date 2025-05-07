@@ -34,10 +34,10 @@ ggplot(file, aes(x=launch_temp, y=factor(num_thermal_distress)))+
   ggtitle("O-rings damage during previous launches")+
   ylab("O-rings damaged (out of 6)")+
   xlab("Temperature at launch (°C)")+
-  geom_segment(aes(x = 4.5, y = 1.3, xend = 2, yend = 1.3),
+  geom_segment(aes(x = 3, y = 0.75, xend = 0, yend = 0.75),
     arrow = arrow(), size=0.05) +
-  annotate("text", label = "considered launch temperature",x=4.5, y=1)+
+  annotate("text", label = "predicted temperature next launch",x=6, y=1)+
   theme_minimal()
 ```
 
-Changing y-axis values into objects of class "factor" removes non-integer values, which makes sense, as our data is integer-only. I have not found a satisfactory way to evenly spread the points vertically, the library makes the problem better, but it's still not perfect.
+Changing y-axis values into objects of class "factor" removes non-integer ticks from the axis. I have not found a satisfactory way to help with points overlap; the points should dodge each other vertically, since the number of O-rings number is an integer. I used a library to achieve that, but the results are not perfect.
