@@ -1,0 +1,43 @@
+---
+title: "Assignment 8"
+author: "Wiktor Rorat"
+format: html
+editor: visual
+embed-resources: true
+---
+
+```{r}
+#| warning: false
+library(dplyr)
+library(ggplot2)
+library(ggstance)
+```
+
+I chose to remake the challenger disaster graph. I was able to find the dataset in a repository:
+
+<https://archive.ics.uci.edu/dataset/92/challenger+usa+space+shuttle+o+ring>
+
+```{r}
+#| warning: false
+file <- read.csv2("o-ring-erosion-or-blowby.data", header = FALSE, sep=" ", col.names = c("num_O_rings", "num_thermal_distress", "launch_temp", "leak_check_pressure", "temporal_order"))
+
+# converting fahrenheit to celsius
+file$launch_temp = (file$launch_temp - 32) * (5/9)
+```
+
+```{r}
+#| warning: false
+ggplot(file, aes(x=launch_temp, y=factor(num_thermal_distress)))+
+  geom_point(color="darkred", shape=2, position=position_dodge2v(height = 0.1))+
+  geom_vline(xintercept=-3.33, linetype="twodash", alpha=0.9)+
+  geom_vline(xintercept=-1.66, linetype="twodash", alpha=0.9)+
+  ggtitle("O-rings damage during previous launches")+
+  ylab("O-rings damaged (out of 6)")+
+  xlab("Temperature at launch (°C)")+
+  geom_segment(aes(x = 4.5, y = 1.3, xend = 2, yend = 1.3),
+    arrow = arrow(), size=0.05) +
+  annotate("text", label = "considered launch temperature",x=4.5, y=1)+
+  theme_minimal()
+```
+
+Changing y-axis values into objects of class "factor" removes non-integer values, which makes sense, as our data is integer-only. I have not found a satisfactory way to evenly spread the points vertically, the library makes the problem better, but it's still not perfect.
